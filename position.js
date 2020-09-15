@@ -51,6 +51,7 @@ var MTYPE_WORM = 5;
 var MTYPE_NINJAR2V = 6;
 var MTYPE_NINJAV2V = 7;
 var MTYPE_NINJAV2R = 8;
+var MTYPE_WIND = 9;
 
 var MATE_VALUE = 10000;
 var BAN_VALUE = MATE_VALUE - 100;
@@ -96,6 +97,8 @@ var PIECE_DIAGONALLY3 = 23;
 var PIECE_WORM = 24;
 var PIECE_NINJAR = 25;
 var PIECE_NINJAV = 26;
+var PIECE_THUNDER = 27;
+var PIECE_WIND = 28;
 
 var RANK_TOP = 3;
 var RANK_BOTTOM = 12;
@@ -315,7 +318,7 @@ var KNIGHT_CHECK_DELTA = [[-33, -18], [-31, -14], [14, 31], [18, 33]];
 var QUEEN_DELTA = [-16, -1, 1, 16, -17, -15, 15, 17];
 var BREAKTHROUGH_DELTA = [[-17, -15], [-17, 15], [-15, 17], [15, 17]];
 var DEVIL_MPARAM = [[0xa6, 0xa7, 0xa8, 0xb6, 0xb7, 0xb8, 0xc6, 0xc7, 0xc8], [0x36, 0x37, 0x38, 0x46, 0x47, 0x48, 0x56, 0x57, 0x58]];
-var MVV_VALUE = [50, 10, 10, 30, 40, 30, 20, 30, 35, 25, 30, 30, 35, 30, 30, 30, 30, 40, 30, 35, 30, 30, 30, 30, 20, 30, 15, 0, 0, 0, 0, 0];
+var MVV_VALUE = [50, 10, 10, 30, 40, 30, 20, 30, 35, 25, 30, 30, 35, 30, 30, 30, 30, 40, 30, 35, 30, 30, 30, 30, 20, 30, 15, 30, 30, 0, 0, 0];
 
 var PIECE_VALUE = [
   [
@@ -777,6 +780,40 @@ var PIECE_VALUE = [
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+  ],[/*雷*/
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+  ],[/*风*/
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0, 90, 90, 90, 90, 90, 90, 90, 90, 90,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
   ],
 ];
 
@@ -1090,6 +1127,10 @@ function CHAR_TO_PIECE(c) {
     return PIECE_NINJAR;
   case "NJV":
     return PIECE_NINJAV;
+  case "TD":
+    return PIECE_THUNDER;
+  case "WD":
+    return PIECE_WIND;
   default:
     return -1;
   }
@@ -1137,7 +1178,7 @@ var rc4 = new RC4([0]);
 PreGen_zobristKeyPlayer = rc4.nextLong();
 rc4.nextLong();
 PreGen_zobristLockPlayer = rc4.nextLong();
-for (var i = 0; i < 54 + 8; i ++) {//z
+for (var i = 0; i < 56 + 8; i ++) {//z
   var keykeys = [];
   var locklocks = [];
   for (var k = 0; k < 2; k++){
@@ -1236,7 +1277,7 @@ Position.prototype.addPiece = function(sq, pc, bDel) {
         PIECE_VALUE[pcAdjust][SQUARE_FLIP(sq)];
     if (pcAdjust == PIECE_WORM) this.wormCounter[1] += bDel ? -1 : 1;
     this.pieceCounter[1][pcAdjust] += bDel ? -1 : 1;
-    pcAdjust += 27;//z
+    pcAdjust += 28;//z
   }
   this.zobristKey ^= PreGen_zobristKeyTable[pcAdjust][0][sq];
   this.zobristLock ^= PreGen_zobristLockTable[pcAdjust][0][sq];
@@ -1253,8 +1294,8 @@ Position.prototype.addPluskind = function(sq, pk, bDel) {
     this.vlBlack += bDel ? -PLUSKIND_VALUE[pkAdjust][SQUARE_FLIP(sq)] : PLUSKIND_VALUE[pkAdjust][SQUARE_FLIP(sq)];
     pkAdjust += 4;//z
   }
-  this.zobristKey ^= PreGen_zobristKeyTable[54 + pkAdjust][1][sq];//z
-  this.zobristLock ^= PreGen_zobristLockTable[54 + pkAdjust][1][sq];//z
+  this.zobristKey ^= PreGen_zobristKeyTable[56 + pkAdjust][1][sq];//z
+  this.zobristLock ^= PreGen_zobristLockTable[56 + pkAdjust][1][sq];//z
 }
 
 Position.prototype.movePiece = function(mv) {
@@ -1271,6 +1312,11 @@ Position.prototype.movePiece = function(mv) {
     //出龙走法
     sqDg = DG(sqSrc,sqDst);
     sqDst = sqDg;
+  }
+  else if (mType == MTYPE_WIND){
+    sqSrc = sqDst;
+    pcSrc = this.squares[sqSrc];
+    sqDst = mParam;
   }
   pcDst = this.squares[sqDst];
 
@@ -1394,6 +1440,12 @@ Position.prototype.undoMovePiece = function() {
     
     this.addPiece(sqSrc, pcSelfSide+PIECE_DRAGON, DEL_PIECE);
     this.addPiece(this.sdPlayer, pcSelfSide+PIECE_DRAGON, ADD_PIECE);
+  }
+  else if (mType == MTYPE_WIND){
+    sqSrc = sqDst;
+    pcSrc = pcDst;
+    sqDst = mParam;
+    pcDst = this.squares[sqDst];
   }
 
   if (mType == MTYPE_ATTACH){
@@ -2715,6 +2767,83 @@ Position.prototype.generateMoves = function(vls) {
         }
       }
       break;
+    //
+    case PIECE_THUNDER:
+      for (var i = 0; i < 4; i ++) {
+        var delta = KING_DELTA[i];
+        var sqDst = sqSrc + delta;
+        var step = 1;
+        while (IN_BOARD(sqDst)) {
+          var pcDst = this.squares[sqDst];
+          if((pcDst & PCNOMAX) == PIECE_DIAMOND){
+            sqDst += delta;
+            step++;
+            continue;
+          }
+          if (step == 1) {
+            if (pcDst == 0) {
+              if (vls == null) {
+                mvs.push(MOVE(sqSrc, sqDst));
+              }
+            }
+            else {
+              if ((pcDst & pcOppSide) != 0) {
+                mvs.push(MOVE(sqSrc, sqDst));
+                if (vls != null) {
+                  vls.push(MVV_LVA(pcDst, 4));
+                }
+              }
+              break;
+            }
+          }
+          else {
+            if (pcDst == 0) {
+              if (vls == null) {
+                mvs.push(MOVE(sqSrc, sqDst));
+              }
+            }
+          }
+          sqDst += delta;
+          step++;
+        }
+      }
+      break;
+    //
+    case PIECE_WIND:
+      var sqWind = [[0, 0], [0, 0], [0, 0], [0, 0]];
+      for (var i = 0; i < 4; i ++) {
+        var delta = KING_DELTA[i];
+        var sqDst = sqSrc + delta;
+        sqWind[i, 0] = (IN_BOARD(sqDst) && this.squares[sqDst] == 0) ? 1 : 0;
+        sqWind[i, 1] = sqDst;
+      }
+      for (var i = 0; i < 4; i ++) {
+        var delta = KING_DELTA[i];
+        var sqDst = sqSrc + delta;
+        while (IN_BOARD(sqDst)) {
+          var pcDst = this.squares[sqDst];
+          if((pcDst & PCNOMAX) == PIECE_DIAMOND){
+            sqDst += delta;
+            continue;
+          }
+          if (pcDst == 0) {
+            if (vls == null) {
+              mvs.push(MOVE(sqSrc, sqDst));
+            }
+          }
+          else if ((pcDst & pcSelfSide) != 0 && (pcDst & PCNOMAX) > PIECE_BISHOP) {
+            if (vls == null) {
+              for (var j = 0; j < 4; j ++) {
+                if (sqWind[j, 0] != 0) {
+                  mvs.push(MOVE(sqSrc, sqDst, MTYPE_WIND, sqWind[j, 1]));
+                }
+              }
+            }
+          }
+          sqDst += delta;
+        }
+      }
+      break;
     }
     
     if(this.bwizard4generate){
@@ -2754,6 +2883,9 @@ Position.prototype.legalMove = function(mv) {
     return false;
   }
   if(mType == MTYPE_NINJAV2R && (pcSrc & PCNOMAX) != PIECE_NINJAV){
+    return false;
+  }
+  if(mType == MTYPE_WIND && (pcSrc & PCNOMAX) != PIECE_WIND){
     return false;
   }
   return this.legalMove4pc(mv) || this.legalMove4pk(mv);
@@ -2803,7 +2935,7 @@ Position.prototype.legalMove4pc = function(mv) {
     return false;
   }
   if ((pcDst & pcSelfSide) != 0) {
-    if (!((pcSrc & PCNOMAX) == PIECE_PHANTOM && (pcDst & PCNOMAX) > PIECE_BISHOP) && mType != MTYPE_ATTACH && mType != MTYPE_NINJAV2R){
+    if (!((pcSrc & PCNOMAX) == PIECE_PHANTOM && (pcDst & PCNOMAX) > PIECE_BISHOP) && mType != MTYPE_ATTACH && mType != MTYPE_NINJAV2R && mType != MTYPE_WIND){
       return false;
     }
   }
@@ -3124,6 +3256,15 @@ Position.prototype.legalMove4pc = function(mv) {
       return IN_BOARD(sqDst) && pcDst == pcSelfSide + PIECE_NINJAV;
     }
     return false;
+  case PIECE_THUNDER:
+    return (pcDst == 0 && (SAME_FILE(sqSrc, sqDst) || SAME_RANK(sqSrc, sqDst))) || KING_SPAN(sqSrc, sqDst);
+  case PIECE_WIND:
+    if (mType == MTYPE_NORMAL) {
+      return (pcDst == 0 && (SAME_FILE(sqSrc, sqDst) || SAME_RANK(sqSrc, sqDst)));
+    }
+    else if (mType == MTYPE_WIND) {
+      return ((pcDst & pcSelfSide) != 0 && (pcDst & PCNOMAX) > PIECE_BISHOP && (SAME_FILE(sqSrc, sqDst) || SAME_RANK(sqSrc, sqDst))) && KING_SPAN(sqSrc, mParam) && this.squares[mParam] == 0;
+    }
   default:
     return false;
   }
@@ -3269,12 +3410,12 @@ Position.prototype.checked = function() {
       }
     }
     for (var delta = -1; delta <= 1; delta += 2) {
-      if ((this.squares[sqSrc + delta] == pcOppSide + PIECE_SHADOW) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_STEALTH) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_DEMON) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_WORM)) {
+      if ((this.squares[sqSrc + delta] == pcOppSide + PIECE_SHADOW) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_STEALTH) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_DEMON) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_WORM) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_THUNDER)) {
         return true;
       }
     }
     for (var delta = -16; delta <= 16; delta += 32) {
-      if ((this.squares[sqSrc + delta] == pcOppSide + PIECE_SHADOW) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_STEALTH) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_DEMON) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_WORM)) {
+      if ((this.squares[sqSrc + delta] == pcOppSide + PIECE_SHADOW) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_STEALTH) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_DEMON) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_WORM) || (this.squares[sqSrc + delta] == pcOppSide + PIECE_THUNDER)) {
         return true;
       }
     }

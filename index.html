@@ -101,7 +101,7 @@ label {
 妖
 走法一：可以直的移动/吃子1格。
 走法二：可以8个方向移动1~2格，不能隔子，此走法仅移动不能吃子。
-走法三：可以8个方向1~2格(不能隔子)吃掉一枚己方棋子接着继续8个方向移动/吃子1~2格(不能隔子)，操作方式为多点一次魔然后点击己方棋子再行动。
+走法三：可以8个方向1~2格(不能隔子)吃掉一枚己方棋子接着继续8个方向移动/吃子1~2格(不能隔子)，操作方式为多点一次妖然后点击己方棋子再行动。
 
 勇
 走法一：可以斜的移动1格，此走法仅移动不能吃子。
@@ -125,6 +125,14 @@ label {
 走法三：处于分身状态时，可以斜1格移动。
 走法四：处于分身状态时，可以和其他任意1个分身合并成1个真身，操作方式为多点一次忍再行动。
 走法五：处于分身状态时，如果另一个分身被吃掉则可以在任意空位制造1个分身，操作方式为多点一次忍再行动。
+
+雷
+走法一：可以直的移动/吃子1格。
+走法二：可以直的移动任意格(可以间隔任意数量的棋子)，此走法仅移动不能吃子。
+
+风
+走法一：可以直的移动任意格(可以间隔任意数量的棋子)，此走法仅移动不能吃子。
+走法二：可以传送同一直线上己方除将/帅、士、象/相外的一枚棋子到直一格处，操作方式为多点一次风然后点击己方棋子再行动。
 
     </textarea>
     </div>
@@ -161,6 +169,8 @@ label {
           <option value="16">红速</option>
           <option value="17">红石</option>
           <option value="18">红忍</option>
+          <option value="19">红雷</option>
+          <option value="20">红风</option>
         </select></div>
         <div><select id="selBlack" style="padding:0px">
           <option selected value="0">黑盾</option>
@@ -182,6 +192,8 @@ label {
           <option value="16">黑速</option>
           <option value="17">黑石</option>
           <option value="18">黑忍</option>
+          <option value="19">黑雷</option>
+          <option value="20">黑风</option>
         </select></div>
         <div style="padding-top:2px"><input type="button" class="button" value="重新开始" onclick="restart_click()"></div>
         <br>
@@ -319,6 +331,12 @@ function restart_click() {
     case 18:
       fenstr += "[njr]1p1p1p1[njr]/9/9/";
       break;
+    case 19:
+      fenstr += "[td]1p1p1p1[td]/9/9/";
+      break;
+    case 20:
+      fenstr += "[wd]1p1p1p1[wd]/9/9/";
+      break;
   }
   switch (selRed.selectedIndex) {
     case 0:
@@ -375,6 +393,12 @@ function restart_click() {
       break;
     case 18:
       fenstr += "[NJR]1P1P1P1[NJR]/1C5C1/9/RNBAKABNR ";
+      break;
+    case 19:
+      fenstr += "[TD]1P1P1P1[TD]/1C5C1/9/RNBAKABNR ";
+      break;
+    case 20:
+      fenstr += "[WD]1P1P1P1[WD]/1C5C1/9/RNBAKABNR ";
       break;
   }
   if(selRed.selectedIndex == 1)fenstr += "D";

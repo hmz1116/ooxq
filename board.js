@@ -40,8 +40,8 @@ var THINKING_TOP = (BOARD_HEIGHT - THINKING_SIZE) >> 1;
 var MAX_STEP = 8;
 var PIECE_NAME = [
   "oo", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-  "rk", "ra", "rb", "rn", "rr", "rc", "rp", "rs", "rd", "rv", "rx", "rf", "rw", "rt", "rz", "ru", "ro", "rl", "ri", "rbt", "rdm", "rd1", "rd2", "rd3", "rwm", "rnjr", "rnjv", null, null, null, null, null,
-  "bk", "ba", "bb", "bn", "br", "bc", "bp", "bs", "bd", "bv", "bx", "bf", "bw", "bt", "bz", "bu", "bo", "bl", "bi", "bbt", "bdm", "bd1", "bd2", "bd3", "bwm", "bnjr", "bnjv", null, null, null, null, null,
+  "rk", "ra", "rb", "rn", "rr", "rc", "rp", "rs", "rd", "rv", "rx", "rf", "rw", "rt", "rz", "ru", "ro", "rl", "ri", "rbt", "rdm", "rd1", "rd2", "rd3", "rwm", "rnjr", "rnjv", "rtd", "rwd", null, null, null,
+  "bk", "ba", "bb", "bn", "br", "bc", "bp", "bs", "bd", "bv", "bx", "bf", "bw", "bt", "bz", "bu", "bo", "bl", "bi", "bbt", "bdm", "bd1", "bd2", "bd3", "bwm", "bnjr", "bnjv", "btd", "bwd", null, null, null,
 ];
 
 function SQ_X(sq) {
@@ -94,6 +94,7 @@ function Board(container, images, sounds) {
   this.pcWMready = [false, false];
   this.pcNJRready = [false, false];
   this.pcNJVready = [false, false];
+  this.pcWDready = [false, false];
 
   var style = container.style;
   style.position = "relative";
@@ -217,6 +218,8 @@ Board.prototype.addMove = function(mv, computerMove) {
   this.pcNJRready[1] = false;
   this.pcNJVready[0] = false;
   this.pcNJVready[1] = false;
+  this.pcWDready[0] = false;
+  this.pcWDready[1] = false;
   this.busy = true;
   if (!this.animated) {
     this.postAddMove(mv, computerMove);
@@ -558,7 +561,19 @@ Board.prototype.clickSquare = function(sq_) {
   var pk = this.pos.pksquares[sq];
   var sd = this.pos.sdPlayer;
   if ((pc & SIDE_TAG(this.pos.sdPlayer)) != 0) {
-    if(this.pcDMready[sd]){
+    if(this.pcWDready[sd]){
+      if(this.sqReady == sq){
+        this.sqReady = 0;
+        this.exsqSelected = 0;
+        this.pcWDready[sd] = false;
+      }
+      else{
+        if(this.exsqSelected > 0)this.drawSquare(this.exsqSelected, false);
+        this.exsqSelected = sq;
+      }
+      this.drawSquare(sq, true);
+    }
+    else if(this.pcDMready[sd]){
       if(this.sqReady == sq){
         this.sqReady = 0;
         this.exsqSelected = 0;
@@ -706,6 +721,13 @@ Board.prototype.clickSquare = function(sq_) {
             this.exsqSelected = 0;
           }
         }
+        else if ((pc & PCNOMAX) == PIECE_WIND) {
+          this.pcWDready[sd] = !this.pcWDready[sd];
+          if(this.pcWDready[sd]){
+            this.sqReady = sq;
+            this.exsqSelected = 0;
+          }
+        }
         else if ((pc & PCNOMAX) == PIECE_DIAGONALLY1) {
           this.pcD1ready[sd] = !this.pcD1ready[sd];
         }
@@ -780,6 +802,9 @@ Board.prototype.clickSquare = function(sq_) {
     }
     else if(this.pcDMready[sd] && (this.pos.squares[this.sqSelected] & PCNOMAX) == PIECE_DEMON && this.exsqSelected > 0){
       this.addMove(MOVE(this.sqSelected, sq, MTYPE_DEMON, this.exsqSelected), false);
+    }
+    else if(this.pcWDready[sd] && (this.pos.squares[this.sqSelected] & PCNOMAX) == PIECE_WIND && this.exsqSelected > 0){
+      this.addMove(MOVE(this.sqSelected, this.exsqSelected, MTYPE_WIND, sq), false);
     }
     else{
       this.addMove(MOVE(this.sqSelected, sq), false);
@@ -882,6 +907,12 @@ Board.prototype.drawSquare = function(sq, selected, oosgif = "oos.gif") {
   else if(this.pcNJVready[1] && pn == "bnjv"){
     img.src = this.images + "bnjvR" + ".gif";
   }
+  else if(this.pcWDready[0] && pn == "rwd"){
+    img.src = this.images + "rwdR" + ".gif";
+  }
+  else if(this.pcWDready[1] && pn == "bwd"){
+    img.src = this.images + "bwdR" + ".gif";
+  }
   else{
     img.src = this.images + PIECE_NAME[this.pos.squares[sq]] + ".gif";
   }
@@ -973,6 +1004,8 @@ Board.prototype.restart = function(fen) {
   this.pcNJRready[1] = false;
   this.pcNJVready[0] = false;
   this.pcNJVready[1] = false;
+  this.pcWDready[0] = false;
+  this.pcWDready[1] = false;
   this.pos.lastmovepc[1-this.pos.sdPlayer] = PIECE_WIZARD;
   this.pos.lastmovepc[this.pos.sdPlayer] = PIECE_WIZARD;
   this.result = RESULT_UNKNOWN;
@@ -1014,6 +1047,8 @@ Board.prototype.retract = function() {
   this.pcNJRready[1] = false;
   this.pcNJVready[0] = false;
   this.pcNJVready[1] = false;
+  this.pcWDready[0] = false;
+  this.pcWDready[1] = false;
   this.result = RESULT_UNKNOWN;
   if (this.pos.mvList.length > 1) {
     this.pos.undoMakeMove();
