@@ -1178,7 +1178,7 @@ var rc4 = new RC4([0]);
 PreGen_zobristKeyPlayer = rc4.nextLong();
 rc4.nextLong();
 PreGen_zobristLockPlayer = rc4.nextLong();
-for (var i = 0; i < 56 + 8; i ++) {//z
+for (var i = 0; i < 58 + 8; i ++) {//z
   var keykeys = [];
   var locklocks = [];
   for (var k = 0; k < 2; k++){
@@ -1277,7 +1277,7 @@ Position.prototype.addPiece = function(sq, pc, bDel) {
         PIECE_VALUE[pcAdjust][SQUARE_FLIP(sq)];
     if (pcAdjust == PIECE_WORM) this.wormCounter[1] += bDel ? -1 : 1;
     this.pieceCounter[1][pcAdjust] += bDel ? -1 : 1;
-    pcAdjust += 28;//z
+    pcAdjust += 29;//z
   }
   this.zobristKey ^= PreGen_zobristKeyTable[pcAdjust][0][sq];
   this.zobristLock ^= PreGen_zobristLockTable[pcAdjust][0][sq];
@@ -1294,8 +1294,8 @@ Position.prototype.addPluskind = function(sq, pk, bDel) {
     this.vlBlack += bDel ? -PLUSKIND_VALUE[pkAdjust][SQUARE_FLIP(sq)] : PLUSKIND_VALUE[pkAdjust][SQUARE_FLIP(sq)];
     pkAdjust += 4;//z
   }
-  this.zobristKey ^= PreGen_zobristKeyTable[56 + pkAdjust][1][sq];//z
-  this.zobristLock ^= PreGen_zobristLockTable[56 + pkAdjust][1][sq];//z
+  this.zobristKey ^= PreGen_zobristKeyTable[58 + pkAdjust][1][sq];//z
+  this.zobristLock ^= PreGen_zobristLockTable[58 + pkAdjust][1][sq];//z
 }
 
 Position.prototype.movePiece = function(mv) {
